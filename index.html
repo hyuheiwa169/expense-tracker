@@ -18,18 +18,30 @@
         .toast-animation { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 pb-28 selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-50 text-slate-800 pb-28 selection:bg-blue-600 selection:text-white">
 
-    <!-- Header Tươi tắn, Sáng sủa -->
-    <header class="bg-white/85 backdrop-blur-md border-b border-slate-200/80 p-4 sticky top-0 z-50">
+    <!-- PWA / Add to Home Screen Banner (Học hỏi kiểu JAF Navi) -->
+    <div id="pwaBanner" class="hidden bg-gradient-to-r from-blue-900 to-indigo-900 text-white px-4 py-2.5 text-xs font-medium flex items-center justify-between shadow-md relative z-50">
+        <div class="flex items-center gap-2.5 truncate pr-2">
+            <span class="text-base shrink-0">📱</span>
+            <span class="truncate">Mẹo: Thêm ứng dụng ra Màn hình chính để dùng mượt mà hơn!</span>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+            <button onclick="openInstallGuide()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-2.5 py-1 rounded-lg text-[11px] transition">Xem cách làm</button>
+            <button onclick="dismissPWABanner()" class="w-6 h-6 flex items-center justify-center text-blue-200 hover:text-white font-bold text-sm">✕</button>
+        </div>
+    </div>
+
+    <!-- Header Trang Nhã, Tinh Tế -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 p-4 sticky top-0 z-40 shadow-sm">
         <div class="max-w-md mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-base shadow-sm">👛</div>
-                <h1 id="headerTitle" class="text-base font-bold text-slate-800 tracking-tight">Thêm Giao Dịch</h1>
+                <div class="w-9 h-9 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-700 font-bold text-base shadow-sm">👛</div>
+                <h1 id="headerTitle" class="text-sm font-bold text-slate-900 tracking-tight">Thêm Giao Dịch</h1>
             </div>
             <div class="flex items-center gap-1.5">
-                <button onclick="exportData()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 transition active:scale-95">Sao lưu</button>
-                <label class="bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 cursor-pointer transition active:scale-95">
+                <button onclick="exportData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 transition active:scale-95">Sao lưu</button>
+                <label class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 cursor-pointer transition active:scale-95">
                     Phục hồi <input type="file" id="importFile" onchange="importData(event)" class="hidden" accept=".json">
                 </label>
             </div>
@@ -41,60 +53,59 @@
         <!-- Notification / Alert Container -->
         <div id="alertContainer" class="space-y-2"></div>
         
-        <!-- Toast Container được tinh chỉnh vị trí và giao diện đẹp mắt hơn -->
+        <!-- Toast Container -->
         <div id="toastContainer" class="fixed bottom-24 left-4 right-4 max-w-sm mx-auto z-50 pointer-events-none"></div>
 
         <!-- ================= TAB 1: ADD TRANSACTION ================= -->
         <div id="tabContentAdd" class="space-y-4">
             
-            <div class="bg-white border border-slate-200/80 p-5 rounded-3xl shadow-xl shadow-slate-200/50 space-y-4">
+            <div class="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm space-y-4">
                 <div class="flex items-center justify-between">
                     <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Tạo khoản giao dịch mới</h2>
-                    <span class="text-xs text-indigo-600 font-bold bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100">Yên Nhật (¥)</span>
+                    <span class="text-xs text-blue-700 font-bold bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">Yên Nhật (¥)</span>
                 </div>
                 
                 <form id="txForm" onsubmit="addTransaction(event)" class="space-y-4">
-                    <!-- Segmented Control tươi tắn -->
-                    <div class="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-200/60">
+                    <!-- Segmented Control sắc nét -->
+                    <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
                         <label class="flex-1 cursor-pointer">
                             <input type="radio" name="type" value="expense" checked class="peer hidden" onchange="handleTypeChange()">
-                            <div class="text-center py-2.5 text-xs font-bold rounded-xl text-slate-500 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:shadow-md transition-all duration-200">🔻 Chi Tiêu</div>
+                            <div class="text-center py-2 text-xs font-bold rounded-lg text-slate-600 peer-checked:bg-rose-600 peer-checked:text-white peer-checked:shadow-sm transition-all">🔻 Chi Tiêu</div>
                         </label>
                         <label class="flex-1 cursor-pointer">
                             <input type="radio" name="type" value="income" class="peer hidden" onchange="handleTypeChange()">
-                            <div class="text-center py-2.5 text-xs font-bold rounded-xl text-slate-500 peer-checked:bg-emerald-500 peer-checked:text-white peer-checked:shadow-md transition-all duration-200">🟢 Thu Nhập</div>
+                            <div class="text-center py-2 text-xs font-bold rounded-lg text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:shadow-sm transition-all">🟢 Thu Nhập</div>
                         </label>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="text-[11px] font-bold text-slate-500 block mb-1.5">Số tiền (¥)</label>
-                            <input type="text" inputmode="numeric" id="amount" required placeholder="0" oninput="formatCurrencyInput(this)" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 text-sm text-slate-800 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition">
+                            <label class="text-xs font-bold text-slate-600 block mb-1.5">Số tiền (¥)</label>
+                            <input type="text" inputmode="numeric" id="amount" required placeholder="0" oninput="formatCurrencyInput(this)" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 transition">
                         </div>
                         <div>
-                            <label class="text-[11px] font-bold text-slate-500 block mb-1.5">Ngày giao dịch</label>
-                            <input type="date" id="date" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition">
+                            <label class="text-xs font-bold text-slate-600 block mb-1.5">Ngày giao dịch</label>
+                            <input type="date" id="date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 transition">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="text-[11px] font-bold text-slate-500 block mb-1.5">Danh mục</label>
-                            <input type="text" id="category" list="categoryList" required placeholder="Chọn hoặc nhập..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition">
-                            <datalist id="categoryList"></datalist>
+                            <label class="text-xs font-bold text-slate-600 block mb-1.5">Danh mục</label>
+                            <select id="category" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 transition"></select>
                         </div>
                         <div>
-                            <label class="text-[11px] font-bold text-slate-500 block mb-1.5">Cửa hàng / Nguồn</label>
-                            <input type="text" id="store" placeholder="VD: 7-Eleven" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition">
+                            <label class="text-xs font-bold text-slate-600 block mb-1.5">Cửa hàng / Nguồn</label>
+                            <input type="text" id="store" placeholder="VD: 7-Eleven" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 transition">
                         </div>
                     </div>
 
                     <div>
-                        <label class="text-[11px] font-bold text-slate-500 block mb-1.5">Ghi chú (Tùy chọn)</label>
-                        <input type="text" id="memo" placeholder="Nhập ghi chú thêm..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition">
+                        <label class="text-xs font-bold text-slate-600 block mb-1.5">Ghi chú (Tùy chọn)</label>
+                        <input type="text" id="memo" placeholder="Nhập ghi chú thêm..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 transition">
                     </div>
 
-                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold py-3.5 rounded-2xl text-sm shadow-lg shadow-indigo-500/25 transition active:scale-[0.98]">Lưu Giao Dịch & Nhập Tiếp</button>
+                    <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl text-sm shadow-sm transition active:scale-[0.98]">Lưu Giao Dịch & Nhập Tiếp</button>
                 </form>
             </div>
         </div>
@@ -103,38 +114,38 @@
         <div id="tabContentHistory" class="space-y-4 hidden">
             
             <!-- Month Filter Card -->
-            <div class="bg-white border border-slate-200/80 p-3.5 rounded-2xl shadow-sm flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-500">Tháng thống kê:</span>
-                <input type="month" id="filterMonth" onchange="renderApp()" class="bg-slate-50 border border-slate-200 text-xs text-slate-800 rounded-xl px-3 py-1.5 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <div class="bg-white border border-slate-200 p-3.5 rounded-xl shadow-sm flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-600">Tháng thống kê:</span>
+                <input type="month" id="filterMonth" onchange="renderApp()" class="bg-slate-50 border border-slate-200 text-xs text-slate-900 rounded-lg px-3 py-1.5 font-bold focus:outline-none focus:ring-2 focus:ring-blue-600">
             </div>
 
             <!-- Dashboard Summary Cards -->
             <div class="grid grid-cols-3 gap-2.5">
-                <div class="bg-gradient-to-br from-emerald-50 to-teal-50/50 border border-emerald-200/70 p-3 rounded-2xl shadow-sm">
-                    <p class="text-[10px] text-emerald-600 font-bold tracking-wider uppercase">Tổng Thu</p>
-                    <p id="totalIncome" class="text-xs sm:text-sm font-extrabold text-emerald-700 mt-1 truncate">0 ¥</p>
+                <div class="bg-emerald-50/70 border border-emerald-200 p-3 rounded-xl shadow-sm">
+                    <p class="text-[10px] text-emerald-700 font-bold tracking-wider uppercase">Tổng Thu</p>
+                    <p id="totalIncome" class="text-xs sm:text-sm font-extrabold text-emerald-800 mt-1 truncate">0 ¥</p>
                 </div>
-                <div class="bg-gradient-to-br from-rose-50 to-pink-50/50 border border-rose-200/70 p-3 rounded-2xl shadow-sm">
-                    <p class="text-[10px] text-rose-600 font-bold tracking-wider uppercase">Tổng Chi</p>
-                    <p id="totalExpense" class="text-xs sm:text-sm font-extrabold text-rose-700 mt-1 truncate">0 ¥</p>
+                <div class="bg-rose-50/70 border border-rose-200 p-3 rounded-xl shadow-sm">
+                    <p class="text-[10px] text-rose-700 font-bold tracking-wider uppercase">Tổng Chi</p>
+                    <p id="totalExpense" class="text-xs sm:text-sm font-extrabold text-rose-800 mt-1 truncate">0 ¥</p>
                 </div>
-                <div id="balanceCard" class="bg-gradient-to-br from-blue-50 to-indigo-50/50 border border-blue-200/70 p-3 rounded-2xl shadow-sm">
-                    <p class="text-[10px] text-blue-600 font-bold tracking-wider uppercase">Số Dư</p>
-                    <p id="totalBalance" class="text-xs sm:text-sm font-extrabold text-blue-700 mt-1 truncate">0 ¥</p>
+                <div id="balanceCard" class="bg-blue-50/70 border border-blue-200 p-3 rounded-xl shadow-sm">
+                    <p class="text-[10px] text-blue-700 font-bold tracking-wider uppercase">Số Dư</p>
+                    <p id="totalBalance" class="text-xs sm:text-sm font-extrabold text-blue-900 mt-1 truncate">0 ¥</p>
                 </div>
             </div>
 
             <!-- Transaction History Container -->
-            <div class="bg-white border border-slate-200/80 p-4 rounded-3xl shadow-xl shadow-slate-200/50 space-y-3.5">
+            <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm space-y-3.5">
                 <div class="flex items-center justify-between">
                     <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">📜 Lịch Sử Giao Dịch</h2>
                 </div>
 
                 <!-- History Sub-Tabs Filter -->
-                <div class="flex bg-slate-100 p-1 rounded-2xl border border-slate-200 text-xs font-semibold">
-                    <button onclick="switchHistoryTab('all')" id="subTabAll" class="flex-1 py-2 rounded-xl transition bg-white text-indigo-600 shadow-sm font-bold">Tất cả</button>
-                    <button onclick="switchHistoryTab('expense')" id="subTabExpense" class="flex-1 py-2 rounded-xl transition text-slate-500 font-medium">Chi tiêu</button>
-                    <button onclick="switchHistoryTab('income')" id="subTabIncome" class="flex-1 py-2 rounded-xl transition text-slate-500 font-medium">Thu nhập</button>
+                <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold">
+                    <button onclick="switchHistoryTab('all')" id="subTabAll" class="flex-1 py-2 rounded-lg transition bg-white text-blue-700 shadow-sm font-bold">Tất cả</button>
+                    <button onclick="switchHistoryTab('expense')" id="subTabExpense" class="flex-1 py-2 rounded-lg transition text-slate-600 font-medium">Chi tiêu</button>
+                    <button onclick="switchHistoryTab('income')" id="subTabIncome" class="flex-1 py-2 rounded-lg transition text-slate-600 font-medium">Thu nhập</button>
                 </div>
 
                 <!-- Transaction Items List -->
@@ -145,22 +156,45 @@
     </main>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="fixed bottom-3 left-4 right-4 bg-white/90 backdrop-blur-xl border border-slate-200 shadow-xl rounded-3xl z-50 max-w-sm mx-auto">
+    <nav class="fixed bottom-3 left-4 right-4 bg-white/95 backdrop-blur-xl border border-slate-200 shadow-lg rounded-2xl z-40 max-w-sm mx-auto">
         <div class="flex justify-around p-1.5">
-            <button onclick="switchMainTab('add')" id="navBtnAdd" class="flex flex-col items-center flex-1 py-2 text-indigo-600 font-bold transition rounded-2xl bg-indigo-50 border border-indigo-100">
+            <button onclick="switchMainTab('add')" id="navBtnAdd" class="flex flex-col items-center flex-1 py-2 text-blue-700 font-bold transition rounded-xl bg-blue-50 border border-blue-100">
                 <span class="text-base">➕</span>
                 <span class="text-[10px] mt-0.5 tracking-wide">Nhập Giao Dịch</span>
             </button>
-            <button onclick="switchMainTab('history')" id="navBtnHistory" class="flex flex-col items-center flex-1 py-2 text-slate-400 font-semibold transition rounded-2xl hover:text-slate-600">
+            <button onclick="switchMainTab('history')" id="navBtnHistory" class="flex flex-col items-center flex-1 py-2 text-slate-500 font-semibold transition rounded-xl hover:text-slate-700">
                 <span class="text-base">📊</span>
                 <span class="text-[10px] mt-0.5 tracking-wide">Lịch Sử & Số Dư</span>
             </button>
         </div>
     </nav>
 
+    <!-- Modal Hướng dẫn cài đặt PWA -->
+    <div id="installModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-xl border border-slate-200">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-sm font-bold text-slate-900">📱 Thêm ra màn hình chính</h3>
+                <button onclick="closeInstallGuide()" class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-200 font-bold">✕</button>
+            </div>
+            <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+                <p>Giúp bạn mở ứng dụng nhanh chóng như app thông thường trên điện thoại:</p>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                    <p class="font-bold text-slate-800">🍏 Trên iPhone (Safari):</p>
+                    <p>1. Nhấn vào nút <b>Chia sẻ</b> (hình vuông có mũi tên lên) ở thanh công cụ.</p>
+                    <p>2. Cuộn xuống và chọn <b>"Thêm vào Màn hình chính"</b>.</p>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                    <p class="font-bold text-slate-800">🤖 Trên Android (Chrome):</p>
+                    <p>1. Nhấn vào nút <b>3 chấm dọc</b> ở góc trên bên phải.</p>
+                    <p>2. Chọn <b>"Thêm vào màn hình chính"</b> hoặc <b>"Cài đặt ứng dụng"</b>.</p>
+                </div>
+            </div>
+            <button onclick="closeInstallGuide()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 rounded-xl text-xs transition">Đã hiểu</button>
+        </div>
+    </div>
+
     <!-- JavaScript Logic -->
     <script>
-        // ================= MESSAGE DICTIONARY =================
         const Messages = {
             SUCCESS_SAVE: "Đã lưu giao dịch thành công!",
             ERROR_INVALID_AMOUNT: "Vui lòng nhập số tiền hợp lệ lớn hơn 0.",
@@ -175,9 +209,7 @@
         };
 
         const StorageService = {
-            TX_KEY: 'my_wallet_transactions_v8',
-            BACKUP_KEY: 'my_wallet_last_backup_v8',
-
+            TX_KEY: 'my_wallet_transactions_v9',
             getTransactions() {
                 try {
                     const data = localStorage.getItem(this.TX_KEY);
@@ -215,7 +247,30 @@
             document.getElementById('filterMonth').value = today.substring(0, 7);
             updateCategorySuggestions();
             renderApp();
+            checkPWABanner();
         });
+
+        function checkPWABanner() {
+            // Kiểm tra xem đã ẩn banner trước đó chưa hoặc app đang chạy ở chế độ standalone (mở từ home screen)
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            const dismissed = localStorage.getItem('pwa_banner_dismissed');
+            if (!isStandalone && !dismissed) {
+                document.getElementById('pwaBanner').classList.remove('hidden');
+            }
+        }
+
+        function dismissPWABanner() {
+            document.getElementById('pwaBanner').classList.add('hidden');
+            localStorage.setItem('pwa_banner_dismissed', 'true');
+        }
+
+        function openInstallGuide() {
+            document.getElementById('installModal').classList.remove('hidden');
+        }
+
+        function closeInstallGuide() {
+            document.getElementById('installModal').classList.add('hidden');
+        }
 
         function formatCurrencyInput(input) {
             let value = input.value.replace(/[^0-9]/g, '');
@@ -236,14 +291,14 @@
             if (tab === 'add') {
                 tabAdd.classList.remove('hidden');
                 tabHistory.classList.add('hidden');
-                navBtnAdd.className = "flex flex-col items-center flex-1 py-2 text-indigo-600 font-bold transition rounded-2xl bg-indigo-50 border border-indigo-100";
-                navBtnHistory.className = "flex flex-col items-center flex-1 py-2 text-slate-400 font-semibold transition rounded-2xl hover:text-slate-600";
+                navBtnAdd.className = "flex flex-col items-center flex-1 py-2 text-blue-700 font-bold transition rounded-xl bg-blue-50 border border-blue-100";
+                navBtnHistory.className = "flex flex-col items-center flex-1 py-2 text-slate-500 font-semibold transition rounded-xl hover:text-slate-700";
                 headerTitle.innerText = "Thêm Giao Dịch";
             } else {
                 tabAdd.classList.add('hidden');
                 tabHistory.classList.remove('hidden');
-                navBtnAdd.className = "flex flex-col items-center flex-1 py-2 text-slate-400 font-semibold transition rounded-2xl hover:text-slate-600";
-                navBtnHistory.className = "flex flex-col items-center flex-1 py-2 text-indigo-600 font-bold transition rounded-2xl bg-indigo-50 border border-indigo-100";
+                navBtnAdd.className = "flex flex-col items-center flex-1 py-2 text-slate-500 font-semibold transition rounded-xl hover:text-slate-700";
+                navBtnHistory.className = "flex flex-col items-center flex-1 py-2 text-blue-700 font-bold transition rounded-xl bg-blue-50 border border-blue-100";
                 headerTitle.innerText = "Lịch Sử & Thống Kê";
                 renderApp();
             }
@@ -254,9 +309,9 @@
             ['all', 'expense', 'income'].forEach(t => {
                 const btn = document.getElementById(`subTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
                 if (t === tab) {
-                    btn.className = "flex-1 py-2 rounded-xl transition bg-white text-indigo-600 shadow-sm font-bold";
+                    btn.className = "flex-1 py-2 rounded-lg transition bg-white text-blue-700 shadow-sm font-bold";
                 } else {
-                    btn.className = "flex-1 py-2 rounded-xl transition text-slate-500 font-medium";
+                    btn.className = "flex-1 py-2 rounded-lg transition text-slate-600 font-medium";
                 }
             });
             renderApp();
@@ -264,34 +319,33 @@
 
         function updateCategorySuggestions() {
             const type = document.querySelector('input[name="type"]:checked').value;
-            const datalist = document.getElementById('categoryList');
-            datalist.innerHTML = '';
+            const selectEl = document.getElementById('category');
+            selectEl.innerHTML = '';
             categories[type].forEach(cat => {
                 const option = document.createElement('option');
                 option.value = cat;
-                datalist.appendChild(option);
+                option.textContent = (categoryIcons[cat] || '') + ' ' + cat;
+                selectEl.appendChild(option);
             });
         }
 
         function handleTypeChange() {
             updateCategorySuggestions();
-            document.getElementById('category').value = '';
         }
 
-        // Thiết kế Toast mới gọn gàng, tinh tế và sang trọng hơn
         function showToast(messageKey) {
             const container = document.getElementById('toastContainer');
             const messageText = Messages[messageKey] || messageKey;
 
             container.innerHTML = `
-                <div class="bg-slate-900/95 backdrop-blur-md text-white text-xs font-medium px-4 py-3 rounded-2xl shadow-2xl flex items-center justify-between gap-3 toast-animation pointer-events-auto border border-slate-700/50">
+                <div class="bg-slate-900/95 backdrop-blur-md text-white text-xs font-medium px-4 py-3 rounded-xl shadow-xl flex items-center justify-between gap-3 toast-animation pointer-events-auto border border-slate-700">
                     <div class="flex items-center gap-2.5">
-                        <span class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs shrink-0 font-bold">✓</span>
+                        <span class="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] shrink-0 font-bold">✓</span>
                         <span class="font-semibold tracking-wide">${messageText}</span>
                     </div>
                     <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="switchMainTab('history'); clearToast();" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] px-3 py-1.5 rounded-xl font-bold transition active:scale-95 shadow-md shadow-indigo-600/30">${Messages.BTN_VIEW_HISTORY}</button>
-                        <button onclick="clearToast()" class="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition font-bold text-sm" title="Đóng">✕</button>
+                        <button onclick="switchMainTab('history'); clearToast();" class="bg-blue-600 hover:bg-blue-500 text-white text-[11px] px-3 py-1.5 rounded-lg font-bold transition active:scale-95 shadow-sm">${Messages.BTN_VIEW_HISTORY}</button>
+                        <button onclick="clearToast()" class="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-white rounded-md transition font-bold text-sm" title="Đóng">✕</button>
                     </div>
                 </div>
             `;
@@ -306,7 +360,7 @@
             const typeInput = document.querySelector('input[name="type"]:checked');
             const amountInput = document.getElementById('amount');
             const dateInput = document.getElementById('date');
-            const categoryInput = document.getElementById('category');
+            const categorySelect = document.getElementById('category');
             const storeInput = document.getElementById('store');
             const memoInput = document.getElementById('memo');
 
@@ -324,7 +378,7 @@
                 type: typeInput.value,
                 amount: amount,
                 date: dateInput.value.trim(),
-                category: categoryInput.value.trim(),
+                category: categorySelect.value,
                 store: storeInput.value ? storeInput.value.trim() : '',
                 memo: memoInput.value ? memoInput.value.trim() : ''
             };
@@ -377,29 +431,29 @@
                     const icon = categoryIcons[tx.category] || (isIncome ? '💰' : '📦');
                     
                     listHTML += `
-                        <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-200/60 hover:bg-slate-100/80 transition">
+                        <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100 transition">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-2xl ${isIncome ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-slate-200 text-slate-700 border border-slate-300'} flex items-center justify-center text-base shrink-0 shadow-sm">
+                                <div class="w-9 h-9 rounded-xl ${isIncome ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-slate-200 text-slate-800 border border-slate-300'} flex items-center justify-center text-sm shrink-0 shadow-sm">
                                     ${icon}
                                 </div>
                                 <div class="space-y-0.5">
                                     <div class="flex items-center gap-2">
-                                        <span class="text-xs font-bold text-slate-800">${escapeHtml(tx.category)}</span>
+                                        <span class="text-xs font-bold text-slate-900">${escapeHtml(tx.category)}</span>
                                     </div>
-                                    <div class="text-[11px] text-slate-500 flex gap-2">
+                                    <div class="text-[11px] text-slate-500 flex gap-2 font-medium">
                                         <span>📅 ${tx.date}</span>
                                         ${tx.store ? `<span>🏪 ${escapeHtml(tx.store)}</span>` : ''}
                                     </div>
-                                    ${tx.memo ? `<p class="text-[11px] text-slate-400 italic">💬 ${escapeHtml(tx.memo)}</p>` : ''}
+                                    ${tx.memo ? `<p class="text-[11px] text-slate-500 italic">💬 ${escapeHtml(tx.memo)}</p>` : ''}
                                 </div>
                             </div>
                             <div class="text-right flex items-center gap-3">
                                 <div>
-                                    <span class="text-xs sm:text-sm font-bold ${isIncome ? 'text-emerald-600' : 'text-slate-800'} block">
+                                    <span class="text-xs sm:text-sm font-bold ${isIncome ? 'text-emerald-700' : 'text-slate-900'} block">
                                         ${isIncome ? '+' : '-'}${amountFormatted}
                                     </span>
                                 </div>
-                                <button onclick="deleteTransaction('${tx.id}')" class="w-7 h-7 rounded-xl bg-slate-200/80 hover:bg-rose-100 hover:text-rose-600 text-slate-400 flex items-center justify-center text-xs font-bold transition" title="Xóa">×</button>
+                                <button onclick="deleteTransaction('${tx.id}')" class="w-6 h-6 rounded-lg bg-slate-200 hover:bg-rose-100 hover:text-rose-700 text-slate-500 flex items-center justify-center text-xs font-bold transition" title="Xóa">×</button>
                             </div>
                         </div>
                     `;
@@ -415,11 +469,11 @@
             balanceEl.innerText = balance.toLocaleString('en-US') + ' ¥';
 
             if (balance < 0) {
-                balanceCard.className = "bg-gradient-to-br from-rose-50 to-pink-50/50 border border-rose-200/70 p-3 rounded-2xl shadow-sm";
-                balanceEl.className = "text-xs sm:text-sm font-extrabold text-rose-600 mt-1 truncate";
+                balanceCard.className = "bg-rose-50/70 border border-rose-200 p-3 rounded-xl shadow-sm";
+                balanceEl.className = "text-xs sm:text-sm font-extrabold text-rose-700 mt-1 truncate";
             } else {
-                balanceCard.className = "bg-gradient-to-br from-blue-50 to-indigo-50/50 border border-blue-200/70 p-3 rounded-2xl shadow-sm";
-                balanceEl.className = "text-xs sm:text-sm font-extrabold text-blue-700 mt-1 truncate";
+                balanceCard.className = "bg-blue-50/70 border border-blue-200 p-3 rounded-xl shadow-sm";
+                balanceEl.className = "text-xs sm:text-sm font-extrabold text-blue-900 mt-1 truncate";
             }
 
             document.getElementById('txList').innerHTML = listHTML;
@@ -431,9 +485,9 @@
             let html = '';
             if (balance < 0) {
                 html += `
-                    <div class="bg-rose-50 border border-rose-200 text-rose-700 p-3.5 rounded-2xl flex items-center gap-3 shadow-sm">
-                        <span class="text-xl">⚠️</span>
-                        <div class="text-xs">
+                    <div class="bg-rose-50 border border-rose-200 text-rose-800 p-3.5 rounded-xl flex items-center gap-3 shadow-sm text-xs">
+                        <span class="text-base">⚠️</span>
+                        <div>
                             <span class="font-bold block mb-0.5">Cảnh báo tài chính</span>
                             ${Messages.FINANCIAL_WARNING}
                         </div>
@@ -449,7 +503,7 @@
                 const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href, a.href = url;
+                a.href = url;
                 a.download = `expense-tracker-${new Date().toISOString().slice(0, 10)}.json`;
                 a.click();
                 URL.revokeObjectURL(url);
@@ -476,7 +530,7 @@
 
         function escapeHtml(str) {
             if (!str) return '';
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            return str.replace(/&/g, "&amp;").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
     </script>
 </body>

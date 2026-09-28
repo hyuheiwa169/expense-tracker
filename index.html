@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        * { box-sizing: border-box; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         @keyframes slideUp {
@@ -18,9 +19,9 @@
         .toast-animation { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 pb-28 selection:bg-blue-600 selection:text-white">
+<body class="bg-slate-50 text-slate-800 pb-28 selection:bg-blue-600 selection:text-white overflow-x-hidden">
 
-    <!-- PWA / Add to Home Screen Banner (Học hỏi kiểu JAF Navi) -->
+    <!-- PWA / Add to Home Screen Banner -->
     <div id="pwaBanner" class="hidden bg-gradient-to-r from-blue-900 to-indigo-900 text-white px-4 py-2.5 text-xs font-medium flex items-center justify-between shadow-md relative z-50">
         <div class="flex items-center gap-2.5 truncate pr-2">
             <span class="text-base shrink-0">📱</span>
@@ -92,7 +93,7 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="text-xs font-bold text-slate-600 block mb-1.5">Danh mục</label>
-                            <select id="category" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 transition"></select>
+                            <select id="category" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 transition"></select>
                         </div>
                         <div>
                             <label class="text-xs font-bold text-slate-600 block mb-1.5">Cửa hàng / Nguồn</label>
@@ -105,7 +106,7 @@
                         <input type="text" id="memo" placeholder="Nhập ghi chú thêm..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 transition">
                     </div>
 
-                    <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl text-sm shadow-sm transition active:scale-[0.98]">Lưu Giao Dịch & Nhập Tiếp</button>
+                    <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-xl text-sm shadow-sm transition active:scale-[0.98]">Lưu Lịch Sử Giao Dịch</button>
                 </form>
             </div>
         </div>
@@ -251,7 +252,6 @@
         });
 
         function checkPWABanner() {
-            // Kiểm tra xem đã ẩn banner trước đó chưa hoặc app đang chạy ở chế độ standalone (mở từ home screen)
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
             const dismissed = localStorage.getItem('pwa_banner_dismissed');
             if (!isStandalone && !dismissed) {
@@ -432,22 +432,22 @@
                     
                     listHTML += `
                         <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100 transition">
-                            <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-3 min-w-0 pr-2">
                                 <div class="w-9 h-9 rounded-xl ${isIncome ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-slate-200 text-slate-800 border border-slate-300'} flex items-center justify-center text-sm shrink-0 shadow-sm">
                                     ${icon}
                                 </div>
-                                <div class="space-y-0.5">
+                                <div class="space-y-0.5 min-w-0">
                                     <div class="flex items-center gap-2">
-                                        <span class="text-xs font-bold text-slate-900">${escapeHtml(tx.category)}</span>
+                                        <span class="text-xs font-bold text-slate-900 truncate">${escapeHtml(tx.category)}</span>
                                     </div>
-                                    <div class="text-[11px] text-slate-500 flex gap-2 font-medium">
+                                    <div class="text-[11px] text-slate-500 flex gap-2 font-medium truncate">
                                         <span>📅 ${tx.date}</span>
-                                        ${tx.store ? `<span>🏪 ${escapeHtml(tx.store)}</span>` : ''}
+                                        ${tx.store ? `<span class="truncate">🏪 ${escapeHtml(tx.store)}</span>` : ''}
                                     </div>
-                                    ${tx.memo ? `<p class="text-[11px] text-slate-500 italic">💬 ${escapeHtml(tx.memo)}</p>` : ''}
+                                    ${tx.memo ? `<p class="text-[11px] text-slate-500 italic truncate">💬 ${escapeHtml(tx.memo)}</p>` : ''}
                                 </div>
                             </div>
-                            <div class="text-right flex items-center gap-3">
+                            <div class="text-right flex items-center gap-3 shrink-0">
                                 <div>
                                     <span class="text-xs sm:text-sm font-bold ${isIncome ? 'text-emerald-700' : 'text-slate-900'} block">
                                         ${isIncome ? '+' : '-'}${amountFormatted}
@@ -530,7 +530,7 @@
 
         function escapeHtml(str) {
             if (!str) return '';
-            return str.replace(/&/g, "&amp;").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
     </script>
 </body>
